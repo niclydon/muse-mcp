@@ -1,0 +1,5 @@
+mcp==2.3.0
+# The musegadget SDK is installed separately from the official
+# SDK checkout (a pinned, non-editable copy into this venv):
+#   pip install ../muse-gadget-sdk/linux
+# It pulls its own deps (cryptography>=3.3.2, websockets>=13).

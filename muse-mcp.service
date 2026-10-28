@@ -1,0 +1,43 @@
+# muse-mcp.service — example systemd unit.
+# Install: copy this repo to /opt/muse-mcp (or adjust every path
+# below), install to /etc/systemd/system/muse-mcp.service, put
+# your configuration in /opt/muse-mcp/.env (see .env.example),
+# then: systemctl daemon-reload && systemctl enable --now muse-mcp
+#
+# Notes:
+#   - The musegadget pairing store in /var/lib/musegadget is
+#     root-owned mode 0600 and the SDK refuses any other reader,
+#     so this unit runs as root. The store is only ever read;
+#     this service never pairs or writes to it. If your pairing
+#     store is readable by a service user, set User= accordingly
+#     and prefer that.
+#   - Bind the http transport to loopback or a private-network
+#     address via .env (BIND_HOST), never a public interface.
+#     ExecStartPre waits for a non-loopback bind address to exist
+#     so an early boot is not an instant EADDRNOTAVAIL.
+#   - The restart-policy drop-in in muse-mcp.service.d/ adds
+#     exponential restart backoff; install it alongside the unit.
+[Unit]
+Description=muse-mcp — Muse chat directory, messaging, and lifecycle MCP via a paired musegadget Link client
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/muse-mcp
+EnvironmentFile=/opt/muse-mcp/.env
+ExecStartPre=/opt/muse-mcp/scripts/wait-for-bind.sh
+ExecStart=/opt/muse-mcp/venv/bin/python /opt/muse-mcp/server.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=muse-mcp
+ProtectSystem=full
+PrivateTmp=true
+NoNewPrivileges=true
+ReadWritePaths=/opt/muse-mcp
+
+[Install]
+WantedBy=multi-user.target
