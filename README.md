@@ -2,6 +2,8 @@
 
 ![muse-mcp banner](assets/banner.png)
 
+[![M8ven Score](https://m8ven.ai/badge/mcp/niclydon-muse-mcp-d6hd6s?v=8e8a080dca6795f0b3fba301550b524a)](https://m8ven.ai/mcp/niclydon-muse-mcp-d6hd6s?s=readme)
+
 > muse-mcp addresses **Meta Muse conversations** (main and side
 > chats) through the **official Muse gadget Link API**. It is an
 > unofficial community project: not affiliated with, endorsed by,
